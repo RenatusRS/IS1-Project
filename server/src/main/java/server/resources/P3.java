@@ -32,15 +32,15 @@ public class P3 {
 	@GET
 	@Path("all")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getAllFilijala() throws JMSException {
-		return execute(txtMsg("GetFilijalaAll", 1));
+	public Response getAll() throws JMSException {
+		return execute(txtMsg("GetAll", 3));
 	}
 
 	@GET
 	@Path("difference")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getAllKomitent() throws JMSException {
-		return execute(txtMsg("GetKomitentAll", 1));
+	public Response getAllDiff() throws JMSException {
+		return execute(txtMsg("GetDiff", 3));
 	}
 
 	private TextMessage txtMsg(String command, int to) throws JMSException {
@@ -52,18 +52,18 @@ public class P3 {
 	}
 
 	private Response execute(TextMessage tm) throws JMSException {
-		if (p == null) {
-			p = ct.createProducer();
-			c = ct.createConsumer(q, "for=" + 0);
-		}
+		p = ct.createProducer();
+		c = ct.createConsumer(q, "for=" + 0);
+		while (c.receiveNoWait() != null);
 
 		p.send(q, tm);
 
-		ObjectMessage om = (ObjectMessage) c.receive();
+		ObjectMessage om = (ObjectMessage) c.receive(15000);
 
-		ResponseBuilder r = Response.status(om.getIntProperty("status"));
-
-		if (om.getIntProperty("status") == 200) r.entity(om.getObject());
+		ResponseBuilder r;
+		
+		if (om != null) r = Response.status(om.getIntProperty("status")).entity(om.getObject());
+		else r = Response.status(400);
 
 		return r.build();
 	}

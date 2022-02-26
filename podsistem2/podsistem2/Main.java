@@ -57,9 +57,9 @@ public class Main {
 
 				switch (msg.getText()) {
 					case ("OpenRacun"):
-						if (em.find(Komitent.class, msg.getIntProperty("idK")) == null) throw new StatusException("Komitent ne postoji!", 401);
+						if (em.find(Komitent.class, msg.getIntProperty("idK")) == null) throw new StatusException("Komitent ne postoji!", 402);
 						
-						if (!checkFil(msg.getIntProperty("idFil"))) throw new StatusException("Filijala ne postoji!", 402);
+						if (!checkFil(msg.getIntProperty("idFil"))) throw new StatusException("Filijala ne postoji!", 403);
 
 						em.getTransaction().begin();
 						r1 = new Racun(0, 'A', 0, msg.getDoubleProperty("minus"), 0, new Date(), msg.getIntProperty("idFil"), msg.getIntProperty("idK"));
@@ -72,8 +72,8 @@ public class Main {
 					case ("CloseRacun"):
 						r1 = em.find(Racun.class, msg.getIntProperty("idRac"));
 
-						if (r1 == null) throw new StatusException("Racun ne postoji!", 401);
-						if (r1.getStatus() == 'Z') throw new StatusException("Racun je vec zatvoren!", 402);
+						if (r1 == null) throw new StatusException("Racun ne postoji!", 404);
+						if (r1.getStatus() == 'Z') throw new StatusException("Racun je vec zatvoren!", 405);
 
 						em.getTransaction().begin();
 						r1.setStatus('Z');
@@ -85,15 +85,15 @@ public class Main {
 						break;
 					case ("CreateStavkaRazmena"):
 						r1 = em.find(Racun.class, msg.getIntProperty("idRac1"));
-						if (r1 == null) throw new StatusException("Racun 1 ne postoji!", 401);
+						if (r1 == null) throw new StatusException("Racun 1 ne postoji!", 404);
 
 						r2 = em.find(Racun.class, msg.getIntProperty("random"));
-						if (r2 == null) throw new StatusException("Racun 2 ne postoji!", 402);
+						if (r2 == null) throw new StatusException("Racun 2 ne postoji!", 406);
 
-						if (r1.getStatus() == 'B') throw new StatusException("Racun 1 je blokiran!", 403);
+						if (r1.getStatus() == 'B') throw new StatusException("Racun 1 je blokiran!", 408);
 
-						if (r1.getStatus() == 'Z') throw new StatusException("Racun 1 je zatvoren!", 404);
-						if (r2.getStatus() == 'Z') throw new StatusException("Racun 2 je zatvoren!", 405);
+						if (r1.getStatus() == 'Z') throw new StatusException("Racun 1 je zatvoren!", 405);
+						if (r2.getStatus() == 'Z') throw new StatusException("Racun 2 je zatvoren!", 409);
 
 						em.getTransaction().begin();
 						s1 = new Stavka(0, getStavkaRacun(r1.getIdRac(), em).size() + 1, new Date(), msg.getDoubleProperty("iznos"), 'P');
@@ -118,9 +118,9 @@ public class Main {
 						break;
 					case ("CreateStavkaUplata"):
 						r1 = em.find(Racun.class, msg.getIntProperty("idRac1"));
-						if (r1 == null) throw new StatusException("Racun ne postoji!", 401);
+						if (r1 == null) throw new StatusException("Racun ne postoji!", 404);
 
-						if (r1.getStatus() == 'Z') throw new StatusException("Racun je zatvoren!", 402);
+						if (r1.getStatus() == 'Z') throw new StatusException("Racun je zatvoren!", 405);
 
 						if (!checkFil(msg.getIntProperty("random"))) throw new StatusException("Filijala ne postoji!", 403);
 
@@ -140,13 +140,13 @@ public class Main {
 						break;
 					case ("CreateStavkaIsplata"):
 						r1 = em.find(Racun.class, msg.getIntProperty("idRac1"));
-						if (r1 == null) throw new StatusException("Racun ne postoji!", 401);
+						if (r1 == null) throw new StatusException("Racun ne postoji!", 404);
 
-						if (r1.getStatus() == 'Z') throw new StatusException("Racun je zatvoren!", 402);
+						if (r1.getStatus() == 'Z') throw new StatusException("Racun je zatvoren!", 405);
 
-						if (r1.getStatus() == 'B') throw new StatusException("Racun je blokiran!", 403);
+						if (r1.getStatus() == 'B') throw new StatusException("Racun je blokiran!", 408);
 
-						if (!checkFil(msg.getIntProperty("random"))) throw new StatusException("Filijala ne postoji!", 404);
+						if (!checkFil(msg.getIntProperty("random"))) throw new StatusException("Filijala ne postoji!", 403);
 
 						em.getTransaction().begin();
 						(s1 = new Stavka(0, getStavkaRacun(r1.getIdRac(), em).size() + 1, new Date(), msg.getDoubleProperty("iznos"), 'I')).setFilijala(msg.getIntProperty("random"));
@@ -183,7 +183,7 @@ public class Main {
 					case ("ChangeKomitentSediste"):
 						k = em.find(Komitent.class, msg.getIntProperty("idK"));
 
-						if (k == null) throw new StatusException("Komitent ne postoji!", 401);
+						if (k == null) throw new StatusException("Komitent ne postoji!", 402);
 
 						em.getTransaction().begin();
 						k.setSediste(msg.getIntProperty("sediste"));

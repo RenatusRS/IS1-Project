@@ -100,9 +100,9 @@ public class Main {
 					case ("ChangeKomitentSediste"):
 						k = em.find(Komitent.class, msg.getIntProperty("idK"));
 
-						if (k == null) throw new StatusException("Komitent ne postoji!", 401);
+						if (k == null) throw new StatusException("Komitent ne postoji!", 402);
 
-						if (em.find(Mesto.class, msg.getIntProperty("sediste")) == null) throw new StatusException("Mesto ne postoji!", 402);
+						if (em.find(Mesto.class, msg.getIntProperty("sediste")) == null) throw new StatusException("Mesto ne postoji!", 401);
 
 						forward(msg, 2);
 
