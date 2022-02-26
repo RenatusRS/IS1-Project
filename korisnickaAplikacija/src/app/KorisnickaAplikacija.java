@@ -1,4 +1,4 @@
-package etf.korisnickamaven;
+package app;
 
 import entiteti.*;
 import java.awt.*;
@@ -16,7 +16,6 @@ import retrofit2.Response;
 public class KorisnickaAplikacija extends Frame {
 
 	Label labelInfo;
-	JTable table = new JTable();
 
 	private KorisnickaAplikacija() {
 		setLocation(250, 250);

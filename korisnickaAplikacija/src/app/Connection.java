@@ -1,4 +1,4 @@
-package etf.korisnickamaven;
+package app;
 
 import entiteti.*;
 import java.io.IOException;
