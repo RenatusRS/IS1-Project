@@ -7,19 +7,19 @@ Banking transaction system simulation implemented in **Java**.
 Supports actions such as creating a new account, transfering funds from one account to another, getting user information, and more.
 
 The system is composed of several applications.
-
+___
 ### Client Application
 
 **Swing** application used by bank's users to send communicate with the banking system.
 
 The application sends **REST** request to the *Central Server* by using **Retrofit**.
-
+___
 ### Central Server
 
 Acts as a middleman between the *Client Application* and the *Subsystems*.
 
 Processes the requests by passing them to the appropriate subsystem using **JMS**.
-
+___
 ### Subsystems
 
 The subsystems process **JMS** messages received from the *Central Server*. Data on them is stored in a **MySQL** database.
